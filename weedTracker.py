@@ -12,6 +12,7 @@ from flask import Flask
 import requests
 import time
 import os
+import json
 
 from datetime import datetime
   
@@ -66,25 +67,25 @@ def getPurchases():
 def home():
 	return "Hello World"
 
-@app.route("/getLatestPurchase")
-def getLatestPurchase():
-	oldest = {'date': float('inf'), 'amount': 0.0}
+@app.route("/getOldestPurchase")
+def getOldestPurchase():
+	oldest = [{'date': float('inf'), 'amount': 0.0}]
 	for purchase in purchaseDict:
-		if (oldest['date'] > purchase["date"]):
-			oldest = dict(purchase)
-	return str(datetime.fromtimestamp(oldest['date']))
+		if (len(oldest) < 1 or oldest[0]['date'] > purchase["date"]):
+			oldest[0] = (dict(purchase))
+	for purchase in purchaseDict:
+		if (oldest[0]['date'] == purchase["date"]):
+			oldest.append(dict(purchase))
+	return json.dumps(oldest)
 
 @app.route("/getTotalAmount")
 def getTotalAmount():
-	total = 0
+	total = 0.0
 	for purchase in purchaseDict:
 		total += purchase['amount']
-	return total
+	return json.dumps({'total': total})
 
 getPurchases()
-print(getLatestPurchase())
 
-if __name__ == "__main__": 
-    app.run(debug=True) 
-
-# print(latestPurchase())
+if (__name__ == "__main__"):
+	app.run(debug=True)
