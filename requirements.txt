@@ -1,0 +1,5 @@
+Flask
+Selenium
+beautifulsoup4
+requests
+python-dotenv
