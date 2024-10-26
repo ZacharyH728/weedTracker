@@ -25,9 +25,9 @@ async function createWidget(data) {
       tmp += item.amount
     })
     const amount = tmp 
-    const date = new Date(data[0].date * 1000) || "No date";
+    const date = new Date(data[0].date + 5184000 * 1000) || "No date";
     widget.addText(`Amount: ${amount}`);
-    widget.addText(`Date: ${date.toLocaleString()}`);
+    widget.addText(`Date: ${date.toLocaleString('en-de', {year: 'numeric', month: 'numeric', day: 'numeric'})}`);
   } else {
     widget.addText("Failed to load data");
   }

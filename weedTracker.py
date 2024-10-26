@@ -4,6 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 
 from dotenv import load_dotenv
 
@@ -20,10 +22,6 @@ app = Flask(__name__)
 
 load_dotenv()
 
-firefox_options = Options()
-firefox_options.add_argument('-headless')	
-
-
 loginURL = 'https://patient.massciportal.com/mmj-patient/signin'
 purchasesURL = 'https://patient.massciportal.com/mmj-patient/patient/purchaseHistory'
 username = os.getenv('MA_MEDCARD_USERNAME')
@@ -34,7 +32,13 @@ timeFormat = '%m/%d/%Y %H:%M %p'
 purchaseDict = []
 
 def getPurchases():
-	driver = webdriver.Firefox(options=firefox_options)
+	options = Options();
+	options.headless = True
+
+	driver = webdriver.Remote(
+		command_executor='http://selenium:4444/wd/hub',
+		options=options
+	)
 
 	driver.get(loginURL)
 
@@ -88,4 +92,4 @@ def getTotalAmount():
 getPurchases()
 
 if (__name__ == "__main__"):
-	app.run(debug=True)
+	app.run(debug=True, host='0.0.0.0', port=5000)
