@@ -1,7 +1,7 @@
 // This script fetches data from a specified URL and displays it in a widget
 
 // URL to fetch data from
-const url = "http://100.75.225.103:5000/getLatestPurchase";
+const url = "http://1 00.113.211.33:8000/getOldestPurchase";
 
 // Function to fetch data
 async function fetchData() {
@@ -20,14 +20,14 @@ async function createWidget(data) {
   const widget = new ListWidget();
   
   if (data) {
-    // Assuming the JSON response has 'item', 'price', and 'date' keys
-    const item = data.item || "No item";
-    const price = data.price || "No price";
-    const date = data.date || "No date";
-
-    widget.addText(`Item: ${item}`);
-    widget.addText(`Price: ${price}`);
-    widget.addText(`Date: ${date}`);
+    let tmp = 0;
+    data.forEach(item  => {
+      tmp += item.amount
+    })
+    const amount = tmp 
+    const date = new Date(data[0].date * 1000) || "No date";
+    widget.addText(`Amount: ${amount}`);
+    widget.addText(`Date: ${date.toLocaleString()}`);
   } else {
     widget.addText("Failed to load data");
   }
