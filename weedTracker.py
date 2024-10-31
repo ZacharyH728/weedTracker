@@ -75,7 +75,7 @@ def home():
 def getOldestPurchase():
 	oldest = [{'date': float('inf'), 'amount': 0.0}]
 	for purchase in purchaseDict:
-		if (len(oldest) < 1 or oldest[0]['date'] > purchase["date"]):
+		if (len(oldest) < 1 and purchase['date'] >= (time.time() - 5184000) or oldest[0]['date'] > purchase["date"] ):
 			oldest[0] = (dict(purchase))
 	for purchase in purchaseDict:
 		if (oldest[0]['date'] == purchase["date"]):
